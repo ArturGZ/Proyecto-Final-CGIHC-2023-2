@@ -1,0 +1,39 @@
+﻿  Main_Diorama.cpp
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(203,24): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(272,22): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(273,22): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(274,22): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(287,22): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(288,22): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(289,22): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(523,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(524,11): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(528,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(529,18): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(531,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\ProyectoFinal\Main_Diorama.cpp(532,10): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  ProyectoFinal.vcxproj -> D:\Documentos\8voSemestre\CGEIHC\ProyectoFinal\Proyecto-Final-CGIHC-2023-2\Debug\ProyectoFinal.exe

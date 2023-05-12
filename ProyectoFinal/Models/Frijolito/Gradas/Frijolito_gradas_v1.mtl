@@ -1,10 +1,3 @@
-newmtl lambert2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd ConcretoLiso.jpg
-Ni 1.00
 newmtl lambert3SG
 illum 4
 Kd 0.00 0.00 0.00
@@ -12,6 +5,9 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd Planks.jpg
 Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks Planks_specular.jpg
+Ns 18.00
 newmtl lambert4SG
 illum 4
 Kd 0.00 0.00 0.00
@@ -19,3 +15,16 @@ Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd metal.jpg
 Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks metal_specular.jpg
+Ns 18.00
+newmtl phong1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd concreto.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks concreto_specular.jpg
+Ns 18.00

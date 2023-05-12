@@ -51,13 +51,13 @@ GLfloat rotPuerta = 0.0;
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
 	glm::vec3(0.0f, 0.0f, -2.0f),		//Luz 1 magenta
-	glm::vec3(0.2f, 7.0f, 3.0f),		//Luz 2 verde
+	glm::vec3(0.2f, 9.0f, 3.0f),		//Luz 2 verde
 	glm::vec3(12.0f,0.0f,-12.0f),
 	glm::vec3(12.0f,0.0f,  0.0f)
 };
 
 glm::vec3 positionSpotLight = glm::vec3(6.0, 2.0, -6.0);		//Posicion inicial de la spotlight, 
-glm::vec3 directionSpotLight = glm::vec3(0.0, -2.0, 0.0);		//Direccion inicial
+glm::vec3 directionSpotLight = glm::vec3(0.0, -2.0, 0.0);	//Direccion inicial
 
 float vertices[] = {
 	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -127,7 +127,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Proyecto Final CGIHC - Diorama", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Proyecto Final Diorama Frijolito-Lucario", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -165,9 +165,9 @@ int main()
 	Shader lightingShader("Shaders/lighting.vs", "Shaders/lighting.frag");
 	Shader lampShader("Shaders/lamp.vs", "Shaders/lamp.frag");
 
-	//Model Casa((char*)"Models/Frijolito/Casa/Frijolito_casa_v2.obj");
-	//Model Ring((char*)"Models/Frijolito/Ring/Frijolito_ring_v1.obj");
 	Model Gradas((char*)"Models/Frijolito/Gradas/Frijolito_gradas_v1.obj");
+	//Model Ring((char*)"Models/Frijolito/Ring/Frijolito_ring_v1.obj");
+	//Model Casa((char*)"Models/Frijolito/Casa/Frijolito_casa_v2.obj");
 
 
 
@@ -217,9 +217,6 @@ int main()
 
 
 
-		//Load Model
-
-
 		// Use cooresponding shader when setting uniforms/drawing objects
 		lightingShader.Use();
 		GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
@@ -228,8 +225,8 @@ int main()
 
 		// Directional light creando
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f); //Direccion NO posicion
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.25f, 0.25f, 0.25f);  //Iluminacion
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.2f, 0.2f, 0.2f);  //Componente ambiental acompañada de la difusa
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.45f, 0.45f, 0.45f);  //Iluminacion
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.45f, 0.45f, 0.45f);  //Componente ambiental acompañada de la difusa
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 0.6f, 0.6f, 0.6f);
 
 
@@ -269,9 +266,9 @@ int main()
 
 
 		// Point light 3
-		lightColor3.x = abs(sin(glfwGetTime() * Light3.x));
-		lightColor3.y = abs(sin(glfwGetTime() * Light3.y));
-		lightColor3.z = sin(glfwGetTime() * Light3.z);
+		lightColor3.x = Light3.x;
+		lightColor3.y = Light3.y;
+		lightColor3.z = Light3.z;
 
 		// Point light 3
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
@@ -284,9 +281,9 @@ int main()
 
 
 		// Point light 4
-		lightColor4.x = abs(sin(glfwGetTime() * Light4.x));
-		lightColor4.y = abs(sin(glfwGetTime() * Light4.y));
-		lightColor4.z = sin(glfwGetTime() * Light4.z);
+		lightColor4.x = Light4.x;
+		lightColor4.y =Light4.y;
+		lightColor4.z = Light4.z;
 
 		// Point light 4
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[3].position"), pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);
@@ -336,12 +333,10 @@ int main()
 		//----------------------------------//
 		view = camera.GetViewMatrix();
 		model = glm::mat4(1);
-
-		//Casa Frijolito
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1d(glGetUniformLocation(lightingShader.Program, "activaTransparencia"), 0);
 		Gradas.Draw(lightingShader);
-		//Casa.Draw(lightingShader);
+
 
 		// Also draw the lamp object, again binding the appropriate shader
 		lampShader.Use();
@@ -454,30 +449,15 @@ void DoMovement()
 
 
 	//Movimiento posición de spotlight:
-	
+
 
 	//Movimiento de dirección de pointlight:
-	
-	//Animacion puerta
-	if (animPuerta) {
-		if (rotPuerta <= 90.0f)
-			rotPuerta += 0.1f;
-	}
-	else {
-		if (rotPuerta >= 0.0f)
-			rotPuerta -= 0.1f;
-	}
 
 }
 
 // Is called whenever a key is pressed/released via GLFW
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-
-	if (keys[GLFW_KEY_P])
-		animPuerta = !animPuerta;
-
-
 	if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -500,7 +480,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 		active = !active;
 		if (active)
 		{
-			Light1 = glm::vec3(0.8f, 0.8f, 0.8f);	//Variando hasta color gris
+			Light1 = glm::vec3(0.7648f, 0.0588f, 0.8098f);	//Variando hasta color amarillo
 			Light2 = glm::vec3(0.12f, 1.0f, 0.12f);	//Variando hasta color verde
 			//Light3 = glm::vec3(0.0f, 1.0f, 1.0f);	//Variando hasta color cyan
 			//Light4 = glm::vec3(1.0f, 1.0f, 1.0f);	//Variando hasta color blanco
@@ -514,7 +494,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 		}
 	}
 }
-
 
 void MouseCallback(GLFWwindow* window, double xPos, double yPos)
 {

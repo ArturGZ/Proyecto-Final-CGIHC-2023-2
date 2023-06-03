@@ -16,6 +16,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	muevex = 2.0f;
 	BanOnAnim = false;
 	luz = false;
+	cameraIso = true;
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -130,7 +131,15 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow->BanOnAnim = false;
 	}
-
+	//Cambio de camaras
+	if (key == GLFW_KEY_C)
+	{
+		theWindow->cameraIso = false;
+	}
+	if (key == GLFW_KEY_I)
+	{
+		theWindow->cameraIso = true;
+	}
 
 
 

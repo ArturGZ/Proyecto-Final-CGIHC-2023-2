@@ -16,6 +16,7 @@ public:
 	GLfloat getmuevex() { return muevex; }
 	bool getBanOnAnim() { return BanOnAnim; }
 	int getBanluz() { return luz; }
+	bool getCameraInfo() { return cameraIso; }
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -35,6 +36,7 @@ private:
 	GLfloat muevex;
 	bool BanOnAnim;
 	int luz;
+	bool cameraIso;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);

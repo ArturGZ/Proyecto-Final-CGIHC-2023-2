@@ -125,8 +125,15 @@ Model arbol;
 Model arbusto;
 Model LamparaP;
 
+//Frijolito
+Model Ring;
+Model Gradas;
+Model CasaFrijolito;
+
+//Skybox
 Skybox skyboxDia;
 Skybox skyboxNoche;
+
 
 //materiales
 Material Material_brillante;
@@ -358,6 +365,15 @@ int main()
 	Farola.LoadModel("Models/Farola.obj");
 	Poste = Model();
 	Poste.LoadModel("Models/Poste.obj");
+
+	//-----------Frijolito---------------//
+	Ring = Model();
+	Ring.LoadModel("Models/Ring.obj");
+	Gradas = Model();
+	Gradas.LoadModel("Models/Gradas.obj");
+	CasaFrijolito = Model();
+	CasaFrijolito.LoadModel("Models/Casa/CasaFrijolito.obj");
+
 
 	std::vector<std::string> skyboxFacesDia;
 
@@ -697,6 +713,8 @@ int main()
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);//Se declara al inicio para que las texturas no se muevan
 
+		//-------------Modelos-----------//
+		
 		//Piso
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
@@ -898,7 +916,8 @@ int main()
 		modelaux = model;
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		CasaParque.RenderModel();
+		Ring.RenderModel();
+		//CasaParque.RenderModel();
 
 		//##########################//
 		//#### Fuente del Parque####//

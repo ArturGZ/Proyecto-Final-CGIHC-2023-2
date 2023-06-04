@@ -129,6 +129,8 @@ Model LamparaP;
 Model Ring;
 Model Gradas;
 Model CasaFrijolito;
+Model Autobus;
+Model AutobusLlanta;
 
 //Skybox
 Skybox skyboxDia;
@@ -373,6 +375,11 @@ int main()
 	Gradas.LoadModel("Models/Gradas.obj");
 	CasaFrijolito = Model();
 	CasaFrijolito.LoadModel("Models/Casa/CasaFrijolito.obj");
+	Autobus = Model();
+	Autobus.LoadModel("Models/Autobus.obj");
+	AutobusLlanta = Model();
+	AutobusLlanta.LoadModel("Models/Autobus.obj");
+
 
 
 	std::vector<std::string> skyboxFacesDia;
@@ -916,7 +923,9 @@ int main()
 		modelaux = model;
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Ring.RenderModel();
+		//Autobus.RenderModel();
+		//AutobusLlanta.RenderModel();
+		CasaFrijolito.RenderModel();
 		//CasaParque.RenderModel();
 
 		//##########################//

@@ -117,6 +117,7 @@ Model Gradas;
 Model CasaFrijolito;
 Model Autobus;
 Model AutobusLlanta;
+Model Escuela;
 
 //Skybox
 Skybox skyboxDia;
@@ -341,6 +342,8 @@ int main()
 	Autobus.LoadModel("Models/Autobus.obj");
 	AutobusLlanta = Model();
 	AutobusLlanta.LoadModel("Models/Autobus.obj");
+	Escuela = Model();
+	Escuela.LoadModel("Models/Escuela.obj");
 
 
 
@@ -826,17 +829,27 @@ int main()
 
 
 		//##########################//
-		//#### Casa del Parque  ####//
+		//#### Frijolito modelos  ####//
 		//##########################//
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 0.0f));
-		modelaux = model;
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+
+		//Escuela
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-60.0f, 0.0f, -90.0f));
+		//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.6f, 1.6f, 1.6f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		//Autobus.RenderModel();
 		//AutobusLlanta.RenderModel();
+		//CasaFrijolito.RenderModel();
+		Escuela.RenderModel();
+
+		//Casa
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(120.0f, 0.0f, 75.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.6f, 1.6f, 1.6f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		CasaFrijolito.RenderModel();
-		//CasaParque.RenderModel();
 
 
 		//blending: transparencia o traslucidez

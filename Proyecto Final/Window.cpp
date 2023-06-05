@@ -17,6 +17,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	BanOnAnim = false;
 	luz = false;
 	cameraIso = true;
+	circuito = false;
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -141,7 +142,15 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->cameraIso = true;
 	}
 
-
+	//Animacion autobus
+	if (key == GLFW_KEY_M)
+	{
+		theWindow->circuito = false;
+	}
+	if (key == GLFW_KEY_N)
+	{
+		theWindow->circuito = true;
+	}
 
 	if (key >= 0 && key < 1024)
 	{

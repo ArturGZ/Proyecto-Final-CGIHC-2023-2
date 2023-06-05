@@ -73,6 +73,23 @@ float rotColumpioOffset, rotSyBOffset;
 bool BanColumpio, BanSyB;
 float incRot;
 
+//Animacion autobus
+glm::vec3 PosIni(70.0f, 2.16f, -55.0f);
+
+//Movimiento del autobus
+float movKitX = 0.0;
+float movKitZ = 0.0;
+float rotKit = 0.0;
+float movKitXOffset = 0.4;
+float movKitZOffset = 0.4;
+float rotKitOffset = 0.4;
+
+bool recorrido1 = true;
+bool recorrido2 = false;
+bool recorrido3 = false;
+bool recorrido4 = false;
+bool recorrido5 = false;
+
 //Banderas
 int bandia = 0;
 /*unsigned t0, t1;
@@ -341,7 +358,7 @@ int main()
 	Autobus = Model();
 	Autobus.LoadModel("Models/Autobus.obj");
 	AutobusLlanta = Model();
-	AutobusLlanta.LoadModel("Models/Autobus.obj");
+	AutobusLlanta.LoadModel("Models/AutobusLlanta.obj");
 	Escuela = Model();
 	Escuela.LoadModel("Models/Escuela.obj");
 
@@ -452,6 +469,7 @@ int main()
 	rotLucOffset = 2;
 	avanza = false;
 	gira = false;
+	
 
 	rotColumpio = 0.0f;
 	rotColumpioOffset = 0.2f;
@@ -555,6 +573,69 @@ int main()
 				avanza = false;
 			}
 		}
+
+		//-----------------------------------//
+		//--------Animacion autobus----------//
+		//-----------------------------------//
+		if (mainWindow.getCircuito())
+		{		
+			if (recorrido1)
+			{
+				movKitZ += movKitZOffset * deltaTime;
+				if (movKitZ > 85)
+				{
+					recorrido1 = false;
+					recorrido2 = true;
+				}
+			}
+			if (recorrido2)
+			{
+				rotKit = -90;
+				movKitX -= movKitXOffset * deltaTime;
+				if (movKitX < -98)
+				{
+					recorrido2 = false;
+					recorrido3 = true;
+
+				}
+			}
+
+			if (recorrido3)
+			{
+				rotKit = 180;
+				movKitZ -= movKitZOffset * deltaTime;
+				if (movKitZ < 0)
+				{
+					recorrido3 = false;
+					recorrido4 = true;
+				}
+			}
+
+			if (recorrido4)
+			{
+				rotKit = 90;
+				movKitX += movKitXOffset * deltaTime;
+				if (movKitX > 0)
+				{
+					recorrido4 = false;
+					recorrido5 = true;
+
+				}
+			}
+			if (recorrido5)
+			{
+				rotKit = 0;
+				movKitZ += movKitZOffset * deltaTime;
+				if (movKitZ > 85)
+				{
+					recorrido5 = false;
+					recorrido1 = true;
+				}
+			}
+		}
+
+
+
 
 		//Recibir eventos del usuario
 
@@ -834,13 +915,9 @@ int main()
 
 		//Escuela
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-60.0f, 0.0f, -90.0f));
-		//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-60.0f, 0.0f, -100.0f));
 		model = glm::scale(model, glm::vec3(1.6f, 1.6f, 1.6f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Autobus.RenderModel();
-		//AutobusLlanta.RenderModel();
-		//CasaFrijolito.RenderModel();
 		Escuela.RenderModel();
 
 		//Casa
@@ -850,6 +927,64 @@ int main()
 		model = glm::scale(model, glm::vec3(1.6f, 1.6f, 1.6f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		CasaFrijolito.RenderModel();
+
+		//Ring
+		model = glm::mat4(1);
+		model = glm::scale(model, glm::vec3(0.85f, 0.85f, 0.85f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Ring.RenderModel();
+		
+		//Gradas
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -40.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Gradas.RenderModel();
+		model = glm::translate(model, glm::vec3(45.0f, 0.0f, 40.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Gradas.RenderModel();
+
+		//Autobus
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, -0.8, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		//model = glm::translate(model, glm::vec3(70.0f, 2.16f, -50.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Autobus.RenderModel();
+
+			//--------Llantas--------//
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		model = glm::translate(model, glm::vec3(5.4f, 0.0f, 24.8f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AutobusLlanta.RenderModel();
+
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		model = glm::translate(model, glm::vec3(5.4f, 0.0f, -15.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AutobusLlanta.RenderModel();
+
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		model = glm::translate(model, glm::vec3(-5.4f, 0.0f, -15.0f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AutobusLlanta.RenderModel();
+
+		model = glm::mat4(1);
+		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
+		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+		model = glm::translate(model, glm::vec3(-5.4f, 0.0f, 24.8f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AutobusLlanta.RenderModel();
 
 
 		//blending: transparencia o traslucidez

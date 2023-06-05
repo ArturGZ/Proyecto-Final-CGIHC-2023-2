@@ -15,6 +15,7 @@ public:
 	GLfloat getYChange();
 	GLfloat getmuevex() { return muevex; }
 	bool getBanOnAnim() { return BanOnAnim; }
+	bool getCircuito() { return circuito; }
 	int getBanluz() { return luz; }
 	bool getCameraInfo() { return cameraIso; }
 	bool getShouldClose() {
@@ -41,5 +42,7 @@ private:
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
 
+	//Autobus
+	bool circuito;
 };
 

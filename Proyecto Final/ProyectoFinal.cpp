@@ -106,6 +106,7 @@ Texture plainTexture;
 Texture pisoTexture;
 Texture AgaveTexture;
 Texture humo;
+Texture Lago;
 
 
 Model Pueblo;
@@ -135,6 +136,7 @@ Model CasaFrijolito;
 Model Autobus;
 Model AutobusLlanta;
 Model Escuela;
+Model Estanque;
 
 //Skybox
 Skybox skyboxDia;
@@ -313,6 +315,8 @@ int main()
 	AgaveTexture.LoadTextureA();
 	humo = Texture("Textures/humo.tga");
 	humo.LoadTextureA();
+	Lago = Texture("Textures/water.jpg");
+	Lago.LoadTextureA();
 
 
 	Pueblo = Model();
@@ -361,6 +365,9 @@ int main()
 	AutobusLlanta.LoadModel("Models/AutobusLlanta.obj");
 	Escuela = Model();
 	Escuela.LoadModel("Models/Escuela.obj");
+	Estanque = Model();
+	Estanque.LoadModel("Models/Lago.obj");
+	
 
 
 
@@ -986,16 +993,30 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		AutobusLlanta.RenderModel();
 
+		//Estanque
+		model = glm::mat4(1);
+		//model = glm::translate(model, glm::vec3(-80.0f, 0.5f, 80.0f));
+		model = glm::translate(model, glm::vec3(95.0f, 0.1f, 90.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Estanque.RenderModel();
+
+
+
 
 		//blending: transparencia o traslucidez
 		glEnable(GL_BLEND);//Para indicar trasparencia y traslucidez
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//Va antes de la textura
 
 		//textura con movimiento del humo
-		toffsetu += 0.001 * deltaTime;
-		toffsetv += 0.0 * deltaTime;
+		toffsetu += 0.0005 * deltaTime;
+		toffsetv += 0.0003 * deltaTime;
 		if (toffsetu > 1.0)
 			toffsetu = 0.0;
+		if (toffsetv > 1.0) {
+			toffsetv -= 0.0003 * deltaTime;
+			if (toffsetv < 0.0)
+				toffsetv += 0.0003 * deltaTime;
+		}
 		toffset = glm::vec2(toffsetu, toffsetv);
 
 		model = glm::mat4(1.0);
@@ -1019,6 +1040,17 @@ int main()
 		humo.UseTexture();
 		meshList[4]->RenderMesh();
 
+		//----- Textura con movimiento del Lago  -------
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(95.0f, 0.2f, 90.0f));
+		model = glm::scale(model, glm::vec3(19.0f, 15.0f, 8.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Lago.UseTexture();
+		//Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		
 		glDisable(GL_BLEND);//Desactiva el blender
 
 		glUseProgram(0);

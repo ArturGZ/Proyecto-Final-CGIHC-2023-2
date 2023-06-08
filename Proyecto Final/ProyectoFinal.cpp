@@ -392,7 +392,7 @@ int main()
 	Gradas = Model();
 	Gradas.LoadModel("Models/Gradas.obj");
 	CasaFrijolito = Model();
-	CasaFrijolito.LoadModel("Models/Casa/CasaFrijolito.obj");
+	CasaFrijolito.LoadModel("Models/CasaFrijolito.obj");
 	Autobus = Model();
 	Autobus.LoadModel("Models/Autobus.obj");
 	AutobusLlanta = Model();

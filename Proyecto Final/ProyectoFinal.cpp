@@ -92,8 +92,6 @@ bool recorrido5 = false;
 
 //Banderas
 int bandia = 0;
-/*unsigned t0, t1;
-double time;*/
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -128,6 +126,18 @@ Model LucPierIzq;
 Model Farola;
 Model Poste;
 
+Model CasaParque;
+Model Fuente;
+Model Dulceria;
+Model AreaInf;
+Model Reja;
+Model Columpio;
+Model SyB;
+Model Entrada;
+Model Casa2;
+Model Personaje2;
+Model arbol;
+Model arbusto;
 
 //Frijolito
 Model Ring;
@@ -155,6 +165,7 @@ static double limitFPS = 1.0 / 60.0;
 
 // luz direccional
 DirectionalLight mainLight;
+
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -346,11 +357,34 @@ int main()
 	LucPierIzq = Model();
 	LucPierIzq.LoadModel("Models/LucarioPierIzq.obj");
 
-
 	Farola = Model();
 	Farola.LoadModel("Models/Farola.obj");
 	Poste = Model();
 	Poste.LoadModel("Models/Poste.obj");
+
+
+	CasaParque = Model();
+	CasaParque.LoadModel("Models/CasaParque.obj");
+	Fuente = Model();
+	Fuente.LoadModel("Models/FuenteParque.obj");
+	Dulceria = Model();
+	Dulceria.LoadModel("Models/SnackArea.obj");
+	AreaInf = Model();
+	AreaInf.LoadModel("Models/AreaInfantil.obj");
+	Columpio = Model();
+	Columpio.LoadModel("Models/Columpio.obj");
+	SyB = Model();
+	SyB.LoadModel("Models/SubeyBaja.obj");
+	Reja = Model();
+	Reja.LoadModel("Models/Reja.obj");
+	Entrada = Model();
+	Entrada.LoadModel("Models/Entrada.obj");
+	Personaje2 = Model();
+	Personaje2.LoadModel("Models/Mordecai.obj");
+	arbol = Model();
+	arbol.LoadModel("Models/Arbol2.obj");
+	arbusto = Model();
+	arbusto.LoadModel("Models/Arbusto.obj");
 
 	//-----------Frijolito---------------//
 	Ring = Model();
@@ -367,8 +401,6 @@ int main()
 	Escuela.LoadModel("Models/Escuela.obj");
 	Estanque = Model();
 	Estanque.LoadModel("Models/Lago.obj");
-	
-
 
 
 	std::vector<std::string> skyboxFacesDia;
@@ -581,6 +613,47 @@ int main()
 			}
 		}
 
+		// ANIMACION SIMPLE: Columpio
+		if (mainWindow.getBanOnAnim()) { // Rota
+			if (rotColumpio < incRot && BanColumpio == true)
+				rotColumpio += rotColumpioOffset * deltaTime;
+			else if (rotColumpio > -incRot && BanColumpio == false)
+				rotColumpio -= rotColumpioOffset * deltaTime;
+			else {
+				BanColumpio = !BanColumpio;
+				if (incRot < 60.0f)
+					incRot += 5.0f;
+			}
+		}
+		else { // Se detiene y regresa al punto incial
+			if (rotColumpio < -0.1f) {
+				rotColumpio += rotColumpioOffset * deltaTime;
+			}
+			else if (rotColumpio > 0.1f) {
+				rotColumpio -= rotColumpioOffset * deltaTime;
+			}
+			incRot = 0.0f;
+		}
+
+		// ANIMACION SIMPLE: Sube y Baja
+		if (mainWindow.getBanOnAnim()) { // Rota
+			if (rotSyB < 26.0f && BanSyB == true)
+				rotSyB += rotSyBOffset * deltaTime;
+			else if (rotSyB > 0.0f && BanSyB == false)
+				rotSyB -= rotSyBOffset * deltaTime;
+			else {
+				BanSyB = !BanSyB;
+			}
+		}
+		else { // Se detiene y regresa al punto incial
+			if (rotSyB < -0.1f) {
+				rotSyB += rotColumpioOffset * deltaTime;
+			}
+			else if (rotColumpio > 0.1f) {
+				rotSyB -= rotColumpioOffset * deltaTime;
+			}
+		}
+
 		//-----------------------------------//
 		//--------Animacion autobus----------//
 		//-----------------------------------//
@@ -660,15 +733,10 @@ int main()
 			camera.mouseControl(mainWindow.getXChange(), 0.0f);
 		}
 		
-		//camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
-		
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);
-		//skyboxDia.DrawSkybox(camIso.calculateViewMatrix(), projection);
 
 		//Cambio entre día y noche
 		if (dia) {
@@ -914,6 +982,287 @@ int main()
 		//model = glm::rotate(model, 45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LucPierIzq.RenderModel();
+
+		//##########################//
+		//####	  Mordecai      ####//
+		//##########################//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 25.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Personaje2.RenderModel();
+
+		//##########################//
+		//#### Casa del Parque  ####//
+		//##########################//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 0.0f));
+		modelaux = model;
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CasaParque.RenderModel();
+
+		//##########################//
+		//#### Fuente del Parque####//
+		//##########################//
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-15.0f, -0.2f, 15.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Fuente.RenderModel();
+
+		//##########################//
+		//####     Dulcería	    ####//
+		//##########################//
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, -30.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Dulceria.RenderModel();
+
+		//##########################//
+		//#### Area Infantil    ####//
+		//##########################//
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(30.0f, 0.0f, 25.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		modelSyB = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AreaInf.RenderModel();
+
+		//Sube y Baja 1
+		model = modelSyB;
+		model = glm::translate(model, glm::vec3(-0.715f, 0.633f, 2.798f));
+		//model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		model = glm::rotate(model, rotSyB * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SyB.RenderModel();
+
+		//Sube y Baja 2
+		model = modelSyB;
+		model = glm::translate(model, glm::vec3(-0.697, 0.633f, 4.172f));
+		model = glm::rotate(model, (-rotSyB + 26.0f) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SyB.RenderModel();
+
+		//Columpios 1
+		model = modelSyB;
+		model = glm::translate(model, glm::vec3(0.6f, 3.442f, -0.919f));
+		model = glm::rotate(model, rotColumpio * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Columpio.RenderModel();
+
+		//Columpios 2
+		model = modelSyB;
+		model = glm::translate(model, glm::vec3(-1.302f, 3.442f, -0.919f));
+		model = glm::rotate(model, -rotColumpio * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Columpio.RenderModel();
+
+		//##########################//
+		//#### Rejas del parque ####//
+		//##########################// Cada barra mide 0.188f
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(55.0f, 0.0f, 45.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f + 0.188f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f + 0.188f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f + 0.188f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -6.0f + 0.376f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f + 0.188f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f + 0.188f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.0f + 0.188f));
+		//model = glm::rotate(model, 90* toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Entrada.RenderModel();
+
+
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -6.0f + 0.376f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Reja.RenderModel();
+
+		//######################//
+		//#### Flora		####//
+		//######################//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-33.398f, 0.0f, 8.775f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-34.398f, 0.0f, -2.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, -30.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.0f, 0.0f, -50.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-33.0f, 0.0f, -40.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, -35.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 17 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -55.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 17 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(35.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(23.0f, 0.0f, -8.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 0.0f, 8.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-25.398f, 0.0f, 35.775f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 74 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.398f, 0.0f, 35.775f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.398f, 0.0f, 40.775f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 43 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-35.0f, 0.0f, -45.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 80 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, -46.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 74 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-18.0f, 0.0f, -40.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 23 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-33.0f, 0.0f, -30.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(35.0f, 0.0f, 38.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 74 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
 
 
 		//##########################//

@@ -74,7 +74,7 @@ bool BanColumpio, BanSyB;
 float incRot;
 
 //Animacion autobus
-glm::vec3 PosIni(70.0f, 2.16f, -55.0f);
+glm::vec3 PosIni(70.0f, 2.16f, -80.0f);
 
 //Movimiento del autobus
 float movKitX = 0.0;
@@ -662,7 +662,7 @@ int main()
 			if (recorrido1)
 			{
 				movKitZ += movKitZOffset * deltaTime;
-				if (movKitZ > 85)
+				if (movKitZ > 200)		//
 				{
 					recorrido1 = false;
 					recorrido2 = true;
@@ -672,7 +672,7 @@ int main()
 			{
 				rotKit = -90;
 				movKitX -= movKitXOffset * deltaTime;
-				if (movKitX < -98)
+				if (movKitX < -180)		//
 				{
 					recorrido2 = false;
 					recorrido3 = true;
@@ -684,7 +684,7 @@ int main()
 			{
 				rotKit = 180;
 				movKitZ -= movKitZOffset * deltaTime;
-				if (movKitZ < 0)
+				if (movKitZ < 0)		//
 				{
 					recorrido3 = false;
 					recorrido4 = true;
@@ -695,7 +695,7 @@ int main()
 			{
 				rotKit = 90;
 				movKitX += movKitXOffset * deltaTime;
-				if (movKitX > 0)
+				if (movKitX > 0)		//
 				{
 					recorrido4 = false;
 					recorrido5 = true;
@@ -706,7 +706,7 @@ int main()
 			{
 				rotKit = 0;
 				movKitZ += movKitZOffset * deltaTime;
-				if (movKitZ > 85)
+				if (movKitZ > 200)		//
 				{
 					recorrido5 = false;
 					recorrido1 = true;
@@ -804,7 +804,7 @@ int main()
 		//Piso
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.0f, 0.0f, -10.0f));
-		model = glm::scale(model, glm::vec3(15.0f, 1.0f, 14.0f));
+		model = glm::scale(model, glm::vec3(16.0f, 1.0f, 16.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
@@ -825,7 +825,7 @@ int main()
 
 		//Arboles
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-115.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-128.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -841,7 +841,7 @@ int main()
 
 		//Arboles
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(5.0f, 0.0f, 115.0f));
+		model = glm::translate(model, glm::vec3(5.0f, 0.0f, 140.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -849,7 +849,7 @@ int main()
 
 		//Arboles
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(5.0f, 0.0f, -140.0f));
+		model = glm::translate(model, glm::vec3(5.0f, 0.0f, -155.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -918,7 +918,7 @@ int main()
 
 		//Onix
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(movOnix, 0.0f, 100.0f));
+		model = glm::translate(model, glm::vec3(movOnix, 0.0f, 105.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotOnix * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -1271,14 +1271,14 @@ int main()
 
 		//Escuela
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-60.0f, 0.0f, -100.0f));
+		model = glm::translate(model, glm::vec3(-60.0f, 0.0f, -120.0f));
 		model = glm::scale(model, glm::vec3(1.6f, 1.6f, 1.6f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Escuela.RenderModel();
 
 		//Casa
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(120.0f, 0.0f, 75.0f));
+		model = glm::translate(model, glm::vec3(125.0f, 0.0f, 75.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.6f, 1.6f, 1.6f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1286,7 +1286,7 @@ int main()
 
 		//Ring
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-85.0f, 0.0f, 85.0f));
+		model = glm::translate(model, glm::vec3(-80.0f, 0.0f, 85.0f));
 		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
 		//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1305,12 +1305,13 @@ int main()
 		model = glm::mat4(1);
 		model = glm::translate(model, PosIni + glm::vec3(movKitX, -0.8, movKitZ));
 		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
+		model = glm::scale(model, glm::vec3(0.9f, 0.9f, 0.9f));
 		//model = glm::translate(model, glm::vec3(70.0f, 2.16f, -50.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Autobus.RenderModel();
 
 			//--------Llantas--------//
-		model = glm::mat4(1);
+		/*model = glm::mat4(1);
 		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
 		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
 		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
@@ -1342,12 +1343,12 @@ int main()
 		model = glm::translate(model, glm::vec3(-5.4f, 0.0f, 24.8f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		AutobusLlanta.RenderModel();
+		AutobusLlanta.RenderModel();*/
 
 		//Estanque
 		model = glm::mat4(1);
 		//model = glm::translate(model, glm::vec3(-80.0f, 0.5f, 80.0f));
-		model = glm::translate(model, glm::vec3(95.0f, 0.1f, 90.0f));
+		model = glm::translate(model, glm::vec3(100.0f, 0.1f, 90.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Estanque.RenderModel();
 
@@ -1393,7 +1394,7 @@ int main()
 
 		//----- Textura con movimiento del Lago  -------
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(95.0f, 0.2f, 90.0f));
+		model = glm::translate(model, glm::vec3(100.0f, 0.2f, 90.0f));
 		model = glm::scale(model, glm::vec3(19.0f, 15.0f, 8.0f));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));

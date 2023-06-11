@@ -17,6 +17,8 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	BanOnAnim = false;
 	luz = false;
 	cameraIso = true;
+	audioFrijolito = false;
+	audioPokemon = true;
 	circuito = false;
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -132,6 +134,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow->BanOnAnim = false;
 	}
+
 	//Cambio de camaras
 	if (key == GLFW_KEY_C)
 	{
@@ -140,6 +143,18 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_I)
 	{
 		theWindow->cameraIso = true;
+	}
+
+	//Audio frijolito
+	if (key == GLFW_KEY_K)
+	{
+		theWindow->audioFrijolito = true;
+		theWindow->audioPokemon = false;
+	}
+	if (key == GLFW_KEY_L)
+	{
+		theWindow->audioFrijolito = false;
+		theWindow->audioPokemon = true;
 	}
 
 	//Animacion autobus

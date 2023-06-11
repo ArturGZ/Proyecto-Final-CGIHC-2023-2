@@ -2,8 +2,8 @@
 Semestre 2023-2
 Nombres: 
 Arroyo Quiroz José Miguel
-Hernández Hernández Cristian
-Proyecto Final: Diorama de la Vida Cotidiana (Lucario y Mordecai)
+Pérez Quintana Arturo
+Proyecto Final: Diorama de la Vida Cotidiana (Lucario y Frijolito)
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -41,6 +41,12 @@ Proyecto Final: Diorama de la Vida Cotidiana (Lucario y Mordecai)
 #include "SpotLight.h"
 #include "Material.h"
 #include <chrono>
+
+//Para audio
+#include "SoundDevice.h"
+#include "SoundBuffer.h"
+#include "SoundSorce.h"
+
 const float toRadians = 3.14159265f / 180.0f;
 
 //variables para animación
@@ -92,6 +98,8 @@ bool recorrido5 = false;
 
 //Banderas
 int bandia = 0;
+bool audioBandera = false;
+bool audioBandera2 = true;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -163,12 +171,18 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
-// luz direccional
+//Luz direccional
 DirectionalLight mainLight;
 
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
+
+//Audio
+SoundDevice* mysounddevice = SoundDevice::get();
+uint32_t /*ALunit*/ soundFrijolito = SoundBuffer::get()->addSoundEffect("FrijolitoTema.wav");
+uint32_t /*ALunit*/ soundAmbiental = SoundBuffer::get()->addSoundEffect("FrijolitoTema.wav");		//Aqui va el tema ambiental
+SoundSorce mySpeaker;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -539,6 +553,17 @@ int main()
 		if (diferencia >= 60000) {
 			dia = !dia;
 			tiempo_anterior = tiempo_actual;
+		}
+		
+		//Audio bandera sirve para llamar solo una vez la funcion Play
+		if (!audioBandera && mainWindow.getSoundtrack() == true) {
+			mySpeaker.Play(soundFrijolito, 1, soundAmbiental);		// Parametro 1 inicia o continua la musica K
+			audioBandera = true;
+		}
+
+		if (mainWindow.getSoundtrack() == false) {
+			mySpeaker.Play(soundFrijolito, 2,soundAmbiental);		//Parametro 2 pausa L
+			audioBandera = false;
 		}
 
 

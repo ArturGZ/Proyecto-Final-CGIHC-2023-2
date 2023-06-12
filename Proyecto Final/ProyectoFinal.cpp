@@ -96,10 +96,22 @@ bool recorrido3 = false;
 bool recorrido4 = false;
 bool recorrido5 = false;
 
+//Movimiento frijolito
+float angleFri = 0.1;
+float angleFriOffset = 0.01;
+float radius = 8.0;
+float movFriX = radius * cos(angleFri);
+float movFriZ = radius * sin(angleFri);
+float movFriExtremidad = 0.0;
+float movFriExtremidadOffset = 0.65;
+bool BanFrijolito = true;
+
+
 //Banderas
 int bandia = 0;
 bool audioBandera = false;
 bool audioBandera2 = true;
+bool banAntena = false;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -155,6 +167,15 @@ Model Autobus;
 Model AutobusLlanta;
 Model Escuela;
 Model Estanque;
+Model Frijolito;
+Model FrijolitoPiernaDer;
+Model FrijolitoPiernaIzq;
+Model FrijolitoBrazoDer;
+Model FrijolitoBrazoIzq;
+Model AntenaBrazoInf;
+Model AntenaBrazoSup;
+Model Antena;
+
 
 //Skybox
 Skybox skyboxDia;
@@ -317,6 +338,143 @@ void CreateShaders()
 
 
 
+///////////////////////////////KEYFRAMES/////////////////////
+
+float rotBrazoInfZ = 0, rotBrazoInfY = 0, rotBrazoSupZ = 0, rotBrazoSupY = 0, rotAntena = 0;
+
+#define MAX_FRAMES 11
+int i_max_steps = 1500;
+int i_curr_steps = 0;
+
+typedef struct _frame
+{
+	//Variables para GUARDAR Key Frames
+	float rotBrazoInfZ;		//Variable para Rotacion del brazo inferior
+	float rotBrazoInfY;
+	float rotBrazoSupZ;		//Variable para Rotacion del brazo superior
+	float rotBrazoSupY;
+	float rotAntena;		//Variable para la rotacion de la antena
+
+	//Respectivos incrementos
+	float rotIncBraInfZ;
+	float rotIncBraInfY;
+	float rotIncBraSupZ;
+	float rotIncBraSupY;
+	float rotIncAntena;
+
+}FRAME;
+
+
+FRAME KeyFrame[MAX_FRAMES];
+int FrameIndex = 0;			//introducir datos navegando entre los frames
+bool play = false;
+int playIndex = 0;			//Jalo las animaciones
+
+
+GLfloat frames[] = {
+		 0.0,	      0.0,		  0.0,	    0.0,         0.0,		//Frame 0 de parttida
+		17.600029,  150.099960,  43.999905, 0.000000,  -30.0,		//Frame 1
+		29.900076,  -43.099918,  62.199326, 0.000000,   30.0,		//Frame 2
+		19.400036, -131.098816,  -7.100001, 0.000000,  -30.0,		//Frame 3
+		39.499969,  -15.600037,  59.599365, 0.000000,   30.0,		//Frame 4
+		12.900015,  113.198837, -18.400040, 4.370000,  -30.0,		//Frame 5
+		17.000027,  150.099960, -17.200035, 0.000000,   30.0,		//Frame 6
+		 7.799997,  -39.899967, -20.900049, 0.000000,  -30.0,		//Frame 7
+		17.500029, -107.298943,  25.700035,-4.370000,   30.0,		//Frame 8
+		17.600029,  150.099960,  33.999905, 0.000000,  -30.0,		//Frame 9
+		 0.0,	      0.0,		  0.0,	    0.0,         0.0		//Regresa a la posicion original
+};
+
+
+//Cargando datos para keyframes
+void saveFrame(void)
+{
+	//Para los brazos
+	for (int i = 0;i < MAX_FRAMES * 5; i += 5) {
+		KeyFrame[FrameIndex].rotBrazoInfZ = frames[i];
+		KeyFrame[FrameIndex].rotBrazoInfY = frames[i + 1];
+		KeyFrame[FrameIndex].rotBrazoSupZ = frames[i + 2];
+		KeyFrame[FrameIndex].rotBrazoSupY = frames[i + 3];
+
+		//Para la antena
+		KeyFrame[FrameIndex].rotAntena = frames[i + 4];
+
+		FrameIndex++;
+	}
+
+}
+
+void resetElements(void)
+{
+	rotBrazoInfZ = KeyFrame[0].rotBrazoInfZ;
+	rotBrazoInfY = KeyFrame[0].rotBrazoInfY;
+
+	rotBrazoSupZ = KeyFrame[0].rotBrazoSupZ;
+	rotBrazoSupY = KeyFrame[0].rotBrazoSupY;
+
+	rotAntena = KeyFrame[0].rotAntena;
+}
+
+void interpolation(void)
+{
+	KeyFrame[playIndex].rotIncBraInfZ = (KeyFrame[playIndex + 1].rotBrazoInfZ - KeyFrame[playIndex].rotBrazoInfZ) / i_max_steps;
+	KeyFrame[playIndex].rotIncBraSupZ = (KeyFrame[playIndex + 1].rotBrazoSupZ - KeyFrame[playIndex].rotBrazoSupZ) / i_max_steps;
+
+	KeyFrame[playIndex].rotIncBraInfY = (KeyFrame[playIndex + 1].rotBrazoInfY - KeyFrame[playIndex].rotBrazoInfY) / i_max_steps;
+	KeyFrame[playIndex].rotIncBraSupY = (KeyFrame[playIndex + 1].rotBrazoSupY - KeyFrame[playIndex].rotBrazoSupY) / i_max_steps;
+
+	KeyFrame[playIndex].rotIncAntena = (KeyFrame[playIndex + 1].rotAntena - KeyFrame[playIndex].rotAntena) / i_max_steps;
+
+}
+
+void animacion()
+{
+
+	//Movimiento del personaje
+
+	if (play)
+	{
+		if (i_curr_steps >= i_max_steps) //end of animation between frames?
+		{
+			playIndex++;
+			if (playIndex > FrameIndex - 2)	//end of total animation?
+			{
+				printf("Fin secuencia por keyframes\n");
+				playIndex = 0;
+				play = false;
+			}
+			else //Next frame interpolations
+			{
+				i_curr_steps = 0; //Reset counter
+				//Interpolation
+				interpolation();
+			}
+		}
+		else
+		{
+			//Draw animation
+			rotBrazoInfZ += KeyFrame[playIndex].rotIncBraInfZ;
+			rotBrazoSupZ += KeyFrame[playIndex].rotIncBraSupZ;
+
+			rotBrazoInfY += KeyFrame[playIndex].rotIncBraInfY;
+			rotBrazoSupY += KeyFrame[playIndex].rotIncBraSupY;
+
+			rotAntena += KeyFrame[playIndex].rotIncAntena;
+
+
+			i_curr_steps++;
+		}
+
+	}
+}
+
+
+
+/* FIN KEYFRAMES*/
+//Cargando datos para keyframes
+
+
+
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -415,6 +573,23 @@ int main()
 	Escuela.LoadModel("Models/Escuela.obj");
 	Estanque = Model();
 	Estanque.LoadModel("Models/Lago.obj");
+	Frijolito = Model();
+	Frijolito.LoadModel("Models/Frijolito.obj");
+	FrijolitoPiernaDer = Model();
+	FrijolitoPiernaDer.LoadModel("Models/FrijolitoPiernaDer.obj");
+	FrijolitoPiernaIzq = Model();
+	FrijolitoPiernaIzq.LoadModel("Models/FrijolitoPiernaIzq.obj");
+	FrijolitoBrazoDer = Model();
+	FrijolitoBrazoDer.LoadModel("Models/FrijolitoBrazoDer.obj");
+	FrijolitoBrazoIzq = Model();
+	FrijolitoBrazoIzq.LoadModel("Models/FrijolitoBrazoIzq.obj");
+	AntenaBrazoInf = Model();
+	AntenaBrazoInf.LoadModel("Models/brazoInferior.obj");
+	AntenaBrazoSup = Model();
+	AntenaBrazoSup.LoadModel("Models/brazoSuperior.obj");
+	Antena = Model();
+	Antena.LoadModel("Models/antena.obj");
+
 
 
 	std::vector<std::string> skyboxFacesDia;
@@ -534,6 +709,9 @@ int main()
 	// Obtención del tiempo actual
 	auto tiempo_anterior = std::chrono::steady_clock::now();
 
+	//Cargando Keyframes
+	saveFrame();
+
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
@@ -541,6 +719,7 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+		animacion();
 
 		//Obtiene el tiempo Stranscurrido actual
 		auto tiempo_actual = std::chrono::steady_clock::now();
@@ -740,7 +919,58 @@ int main()
 		}
 
 
+		//Animacion Frijolito rotacion
+		if (mainWindow.getSoundtrack()) {
+			angleFri += angleFriOffset * deltaTime;
+			movFriX = radius * cos(angleFri);
+			movFriZ = radius * sin(angleFri);
+		}
+		
 
+		//Animacion piernas frijolito
+		if (mainWindow.getSoundtrack()) {
+			if (movFriExtremidad < 16.0f && BanFrijolito == true)
+				movFriExtremidad += movFriExtremidadOffset * deltaTime;
+
+			else if (movFriExtremidad > -16.0f && BanFrijolito == false)
+				movFriExtremidad -= movFriExtremidadOffset * deltaTime;
+
+			else 
+				BanFrijolito = !BanFrijolito;
+		}
+		else { 
+			if (rotSyB < -0.1f)
+				movFriExtremidad += movFriExtremidadOffset * deltaTime;
+
+			else if (rotColumpio > 0.1f)
+				movFriExtremidad -= movFriExtremidadOffset * deltaTime;
+		}
+		
+
+		//Animacion por keyfames ANTENA
+		if (!banAntena && mainWindow.getAnimKeyFrames() == true)
+		{
+			
+			if (play == false && (FrameIndex > 1))
+			{
+				resetElements();
+				//First Interpolation				
+				interpolation();
+
+				play = true;
+				playIndex = 0;
+				i_curr_steps = 0;
+			}
+			else
+			{
+				play = false;
+			}
+
+			banAntena = true;
+		}
+		if (mainWindow.getAnimKeyFrames() == false) {
+			banAntena = false;
+		}
 
 		//Recibir eventos del usuario
 
@@ -1372,12 +1602,65 @@ int main()
 
 		//Estanque
 		model = glm::mat4(1);
-		//model = glm::translate(model, glm::vec3(-80.0f, 0.5f, 80.0f));
 		model = glm::translate(model, glm::vec3(100.0f, 0.1f, 90.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Estanque.RenderModel();
 
+		//Frijolito
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-80.0f + movFriX, 4.35f, 85.0f + movFriZ));
+		model = glm::rotate(model, glm::radians(-angleFri*60), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Frijolito.RenderModel();
 
+		//Piernas Frijolito
+		model = glm::translate(model, glm::vec3(0.7f , 2.327f, 0.0f));
+		model = glm::rotate(model, glm::radians(movFriExtremidad), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FrijolitoPiernaIzq.RenderModel();
+
+		model = glm::rotate(model, glm::radians(-movFriExtremidad), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-1.4f , 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-movFriExtremidad), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FrijolitoPiernaDer.RenderModel();
+	
+		//Brazos Frijolito
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-80.0f + movFriX, 4.2f, 85.0f + movFriZ));
+		model = glm::rotate(model, glm::radians(-angleFri * 60), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(1.6f, 3.96f, 0.0f));
+		model = glm::rotate(model, glm::radians(-movFriExtremidad), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FrijolitoBrazoIzq.RenderModel();
+
+		model = glm::rotate(model, glm::radians(movFriExtremidad), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-3.3f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(movFriExtremidad), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		FrijolitoBrazoDer.RenderModel();
+
+
+		//Antena
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-62.5f, 24.1f, 32.0f));
+		model = glm::rotate(model, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		model = glm::rotate(model, glm::radians(rotBrazoInfY), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotBrazoInfZ-5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AntenaBrazoInf.RenderModel();
+
+		model = glm::translate(model, glm::vec3(-0.516f, 0.674f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotBrazoSupY), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotBrazoSupZ), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		AntenaBrazoSup.RenderModel();
+
+		model = glm::translate(model, glm::vec3(-0.429f, 0.269f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotAntena), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Antena.RenderModel();
 
 
 		//blending: transparencia o traslucidez

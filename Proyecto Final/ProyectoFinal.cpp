@@ -122,7 +122,6 @@ Camera camIso;
 
 Texture plainTexture;
 Texture pisoTexture;
-Texture AgaveTexture;
 Texture humo;
 Texture Lago;
 
@@ -202,7 +201,7 @@ SpotLight spotLights[MAX_SPOT_LIGHTS];
 //Audio
 SoundDevice* mysounddevice = SoundDevice::get();
 uint32_t /*ALunit*/ soundFrijolito = SoundBuffer::get()->addSoundEffect("FrijolitoTema.wav");
-uint32_t /*ALunit*/ soundAmbiental = SoundBuffer::get()->addSoundEffect("FrijolitoTema.wav");		//Aqui va el tema ambiental
+uint32_t /*ALunit*/ soundAmbiental = SoundBuffer::get()->addSoundEffect("PokemonIntro.wav");
 SoundSorce mySpeaker;
 
 // Vertex Shader
@@ -494,8 +493,6 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
-	AgaveTexture = Texture("Textures/Agave.tga");
-	AgaveTexture.LoadTextureA();
 	humo = Texture("Textures/humo.tga");
 	humo.LoadTextureA();
 	Lago = Texture("Textures/water.jpg");
@@ -623,13 +620,12 @@ int main()
 		0.55f, 0.62f,
 		0.0f, 0.0f, -1.0f);
 
-
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 
 	pointLights[0] = PointLight(1.0f, 1.0f, 0.0f,
 		2.5f, 3.3f,
-		-40.0f, 15.0f, -40.0f,
+		40.0f, 15.0f, -50.0f,
 		1.0f, 0.5f, 0.0f);
 	pointLightCount++;
 
@@ -641,14 +637,14 @@ int main()
 
 	pointLights[2] = PointLight(1.0f, 1.0f, 0.0f,
 		2.5f, 3.3f,
-		-40.0f, 15.0f, 40.0f,
+		-35.0f, 15.0f, 40.0f,
 		1.0f, 0.5f, 0.0f);
 	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 0.1f,
-		0.0f, 20.0f, -68.0f,
+		30.0f, 20.0f, -88.0f,
 		0.0f, -1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		30.0f);
@@ -656,7 +652,7 @@ int main()
 
 	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 0.1f,
-		-48.0f, 20.0f, -10.0f,
+		-48.0f, 20.0f, -20.0f,
 		0.0f, -1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		30.0f);
@@ -664,7 +660,7 @@ int main()
 
 	spotLights[2] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 0.1f,
-		70.0f, 20.0f, -2.0f,
+		85.0f, 20.0f, -7.0f,
 		0.0f, -1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		30.0f);
@@ -1059,7 +1055,7 @@ int main()
 		//Piso
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.0f, 0.0f, -10.0f));
-		model = glm::scale(model, glm::vec3(16.0f, 1.0f, 16.0f));
+		model = glm::scale(model, glm::vec3(16.0f, 1.0f, 16.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
@@ -1078,7 +1074,9 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pueblo.RenderModel();
 
-		//Arboles
+		//********Arboles Externos********
+
+		//Arboles Izquierda
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-128.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
@@ -1086,7 +1084,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Arboles.RenderModel();
 
-		//Arboles
+		//Arboles Derecha
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(160.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
@@ -1094,7 +1092,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Arboles.RenderModel();
 
-		//Arboles
+		//Arboles Enfrente
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(5.0f, 0.0f, 140.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
@@ -1102,55 +1100,57 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Arboles.RenderModel();
 
-		//Arboles
+		//Arboles Atras
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(5.0f, 0.0f, -155.0f));
+		model = glm::translate(model, glm::vec3(5.0f, 0.0f, -165.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Arboles.RenderModel();
 
-		//Farola1
+		//*********Modelos de Iluminación***********
+
+		//Farola Atras
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 0.1f, -80.0f));
+		model = glm::translate(model, glm::vec3(30.0f, 0.1f, -100.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Farola.RenderModel();
 
-		//Farola2
+		//Farola Izquierda
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-60.0f, 0.1f, -10.0f));
+		model = glm::translate(model, glm::vec3(-60.0f, 0.1f, -20.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Farola.RenderModel();
 
-		//Farola3
+		//Farola Derecha
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(90.0f, 0.1f, -2.0f));
+		model = glm::translate(model, glm::vec3(100.0f, 0.1f, -7.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Farola.RenderModel();
 
-		//Poste1
+		//Poste Izquierda
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-40.0f, 0.0f, 40.0f));
+		model = glm::translate(model, glm::vec3(-35.0f, 0.0f, 40.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Poste.RenderModel();
 
-		//Poste2
+		//Poste Derecha
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(40.0f, 0.0f, 40.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Poste.RenderModel();
 
-		//Poste3
+		//Poste Atras
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-40.0f, 0.0f, -50.0f));
+		model = glm::translate(model, glm::vec3(40.0f, 0.0f, -50.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Poste.RenderModel();
@@ -1371,7 +1371,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Entrada.RenderModel();
 
-
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -6.0f + 0.376f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1565,41 +1564,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Autobus.RenderModel();
 
-			//--------Llantas--------//
-		/*model = glm::mat4(1);
-		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
-		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		model = glm::translate(model, glm::vec3(5.4f, 0.0f, 24.8f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		AutobusLlanta.RenderModel();
-
-		model = glm::mat4(1);
-		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
-		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		model = glm::translate(model, glm::vec3(5.4f, 0.0f, -15.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		AutobusLlanta.RenderModel();
-
-		model = glm::mat4(1);
-		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
-		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		model = glm::translate(model, glm::vec3(-5.4f, 0.0f, -15.0f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		AutobusLlanta.RenderModel();
-
-		model = glm::mat4(1);
-		model = glm::translate(model, PosIni + glm::vec3(movKitX, 0, movKitZ));
-		model = glm::rotate(model, glm::radians(rotKit), glm::vec3(0.0f, 1.0f, 0.0));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		model = glm::translate(model, glm::vec3(-5.4f, 0.0f, 24.8f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		AutobusLlanta.RenderModel();*/
-
 		//Estanque
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(100.0f, 0.1f, 90.0f));
@@ -1640,7 +1604,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		FrijolitoBrazoDer.RenderModel();
 
-
 		//Antena
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(-62.5f, 24.1f, 32.0f));
@@ -1667,7 +1630,7 @@ int main()
 		glEnable(GL_BLEND);//Para indicar trasparencia y traslucidez
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//Va antes de la textura
 
-		//textura con movimiento del humo
+		//Para texturas con movimiento
 		toffsetu += 0.0005 * deltaTime;
 		toffsetv += 0.0003 * deltaTime;
 		if (toffsetu > 1.0)
@@ -1679,6 +1642,7 @@ int main()
 		}
 		toffset = glm::vec2(toffsetu, toffsetv);
 
+		//------Textura con movimiento del humo------
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-21.972f, 28.592f, 3.27f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));

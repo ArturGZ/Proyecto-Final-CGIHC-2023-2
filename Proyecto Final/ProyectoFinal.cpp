@@ -690,7 +690,7 @@ int main()
 	movZLucOffset = 0.1;
 	rotCuerLuc = 0;
 	rotLuc = 0;
-	rotLucOffset = 2;
+	rotLucOffset = 1;
 	avanza = false;
 	gira = false;
 	
@@ -759,28 +759,30 @@ int main()
 		//Animacion Onix
 		if (movOnix > -90.5f && avanzaOnix == false && mainWindow.getBanOnAnim() == true) {
 			movOnix -= movOnixOffset * deltaTime;
-			//rotOnix += rotOnixOffset * deltaTime;
+			rotOnix += rotOnixOffset * deltaTime;
 			if (movOnix > -91.0f && movOnix < -90.0f) {
 				avanzaOnix = true;
 			}
 		}
 		else if (movOnix < 90.5f && avanzaOnix == true && mainWindow.getBanOnAnim() == true) {
 			movOnix += movOnixOffset * deltaTime;
-			//rotOnix -= rotVolOffset * deltaTime;
+			rotOnix -= rotVolOffset * deltaTime;
 			if (movOnix < 91.0f && movOnix > 90.0f)
 				avanzaOnix = false;
 		}
 
 		//Animación Avatar
-		if (rotLuc < 20 && gira == false && mainWindow.getBanOnAnim() == true) {
-			rotLuc += rotLucOffset * deltaTime;
-			if (rotLuc < 21 && rotLuc > 19) {
+		if (rotLuc < 21 && gira == false && mainWindow.getBanOnAnim() == true) {
+			rotLuc += rotLucOffset ;
+			//std::cout << rotLuc << std::endl;
+			if (rotLuc < 23 && rotLuc > 19) {
 				gira = true;
 			}
 		}
-		else if (rotLuc > -20 && gira == true && mainWindow.getBanOnAnim() == true) {
-			rotLuc -= rotLucOffset * deltaTime;
-			if (rotLuc < -19 && rotLuc > -21) {
+		else if (rotLuc > -21 && gira == true && mainWindow.getBanOnAnim() == true) {
+			rotLuc -= rotLucOffset ;
+			//std::cout << rotLuc << std::endl;
+			if (rotLuc < -19 && rotLuc > -23) {
 				gira = false;
 			}
 		}
@@ -935,10 +937,10 @@ int main()
 				BanFrijolito = !BanFrijolito;
 		}
 		else { 
-			if (rotSyB < -0.1f)
+			if (movFriExtremidad < -0.1f)
 				movFriExtremidad += movFriExtremidadOffset * deltaTime;
 
-			else if (rotColumpio > 0.1f)
+			else if (movFriExtremidad > 0.1f)
 				movFriExtremidad -= movFriExtremidadOffset * deltaTime;
 		}
 		
@@ -1173,9 +1175,12 @@ int main()
 
 		//Onix
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(movOnix, 0.0f, 105.0f));
+		model = glm::translate(model, glm::vec3(movOnix, 3.0f, 105.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		if(avanzaOnix == false)
+			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		else
+			model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotOnix * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Onix.RenderModel();
@@ -1183,7 +1188,7 @@ int main()
 		
 		//Cuerpo
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-50.0f+movXLuc, 0.0f, 50.0f-movZLuc));
+		model = glm::translate(model, glm::vec3(-50.0f+movXLuc, 4.0f, 50.0f-movZLuc));
 		if(rotCuerLuc == 0)
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		else if(rotCuerLuc == 1)
@@ -1213,28 +1218,28 @@ int main()
 		//Brazo Derecho
 		model = glm::mat4(1.0);
 		model = modelLuc;
-		//model = glm::rotate(model, 45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, rotLuc * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LucBraDer.RenderModel();
 
 		//Brazo Izquierdo
 		model = glm::mat4(1.0);
 		model = modelLuc;
-		//model = glm::rotate(model, 45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, -rotLuc * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LucBraIzq.RenderModel();
 
 		//Pierna Derecha
 		model = glm::mat4(1.0);
 		model = modelLuc;
-		//model = glm::rotate(model, 45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotLuc * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LucPierDer.RenderModel();
 
 		//Pierna Izquierda
 		model = glm::mat4(1.0);
 		model = modelLuc;
-		//model = glm::rotate(model, 45 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -rotLuc * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LucPierIzq.RenderModel();
 
@@ -1606,7 +1611,7 @@ int main()
 
 		//Antena
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-62.5f, 24.1f, 32.0f));
+		model = glm::translate(model, glm::vec3(-62.5f, 24.1f, 37.0f));
 		model = glm::rotate(model, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
 		model = glm::rotate(model, glm::radians(rotBrazoInfY), glm::vec3(0.0f, 1.0f, 0.0f));
